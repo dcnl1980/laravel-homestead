@@ -1,14 +1,9 @@
 FROM ubuntu:16.04
-MAINTAINER Jaouad E. <jaouad.elmoussaoui@gmail.com>
+MAINTAINER Chris van Steenbergen <cvsteenbergen@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install configurationfiles
-ADD local.medsen-it.conf /etc/apache2/sites-enabled/local.medsen-it.conf
-
 # Install packages
-
-
 ADD provision.sh /provision.sh
 ADD serve.sh /serve.sh
 
