@@ -6,6 +6,8 @@ web:
         - "80:80" # web NGINX
         - "81:81" # web APACHE
         - "25:25" # mail
+        - "1025:1025" # mailhog mail
+        - "8025:8025" # mailhog web
         - "2222:22" # ssh
         - "35729:35729" # live reload
         - "9876:9876" # karma server
