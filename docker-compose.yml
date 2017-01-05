@@ -1,0 +1,32 @@
+web:
+    #image: shincoder/homestead:php7.0
+    build: .
+    restart: always
+    ports:
+        - "80:80" # web NGINX
+        - "81:81" # web APACHE
+        - "25:25" # mail
+        - "2222:22" # ssh
+        - "35729:35729" # live reload
+        - "9876:9876" # karma server
+    environment:
+        PHP_XDEBUG_ENABLED: 1 # Set 1 to enable
+        XDEBUG_CONFIG: remote_host=172.17.0.1
+    volumes:
+        - ~/OwnCloud/hosts:/home/homestead # composer/git/homestead caching
+        - ~/OwnCloud/hosts/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
+        - ~/OwnCloud/hosts/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+        - ~/OwnCloud/hosts:/var/www # your webfiles
+    links:
+        - mariadb
+mariadb:
+    image: library/mariadb
+    restart: always
+    ports:
+        - "3306:3306"
+    environment:
+        MARIADB_USER: admin # cannot be changed ( for info. only )
+        MARIADB_PASS: root
+    volumes:
+        - ~/OwnCloud/mysql_data:/var/lib/mysql # database files
+        - ~/homestead-docker/my.cnf:/etc/mysql/my.cnf # MySQL

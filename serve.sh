@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#
+# Example: ./serve.sh myapp.dev /apps/myapp/public
 
 block="server {
     listen 80;

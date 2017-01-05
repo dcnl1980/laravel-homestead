@@ -12,14 +12,9 @@ curl -sSL https://get.docker.com/ | sh
 curl -L https://github.com/docker/compose/releases/download/1.6.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 ```
 
-### Pull homestead image
-```shell
-docker pull shincoder/homestead:php7.0
-```
-
 ### Clone && Edit docker-compose.yml
 ```shell
-git clone https://github.com/shincoder/homestead-docker.git
+git clone https://github.com/dcnl1980/laravel-homestead.git
 ```
 rename ```docker-compose.dist.yml``` to ```docker-compose.yml``` then edit the file with you own
 paths and ports.
@@ -54,4 +49,3 @@ change them if you need to.
 
 ### Notes
 - Use docker's local IP address to connect to your database. Run `docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID}`, where `${CID}` is docker container ID of the database
-- Databases: by default mariadb is used as a database, but you are free to use any database you want: choose from these excellent images by Tutum: [tutum/mysql](https://github.com/tutumcloud/mysql) or [tutum/postgresql](https://github.com/tutumcloud/postgresql), they expose different environment variables, so don't forget to update your docker-compose file accordingly.
