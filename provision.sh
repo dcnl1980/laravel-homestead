@@ -89,7 +89,8 @@ service hhvm start
 update-rc.d hhvm defaults
 
 # Enable postfix
-apt-get install -y postfix
+apt-get install -y postfix mailutils
+sudo sed -i 's/relayhost =/relayhost = 127.0.0.1:1025/' /etc/postfix/main.cf
 service postfix start
 
 # Install Composer
@@ -189,10 +190,10 @@ apt-get install -y blackfire-agent blackfire-php
 
 # Install & Configure MailHog
 # Download binary from github
-wget --quiet -O /usr/local/bin/mailhog https://github.com/mailhog/MailHog/releases/download/v0.2.1/MailHog_linux_amd64
+sudo wget --quiet -O /usr/local/bin/mailhog https://github.com/mailhog/MailHog/releases/download/v0.2.1/MailHog_linux_amd64
 
 # Make it executable
-chmod +x /usr/local/bin/mailhog
+sudo chmod +x /usr/local/bin/mailhog
 
 # Make it start on reboot
 sudo tee /etc/systemd/system/mailhog.service <<EOL
@@ -200,15 +201,14 @@ sudo tee /etc/systemd/system/mailhog.service <<EOL
 Description=Mailhog
 After=network.target
 [Service]
-User=vagrant
+User=homestead
 ExecStart=/usr/bin/env /usr/local/bin/mailhog > /dev/null 2>&1 &
 [Install]
 WantedBy=multi-user.target
 EOL
 
 # Start it now in the background
-service mailhog start
-
+sudo /usr/bin/env /usr/local/bin/mailhog > /dev/null 2>&1 &
 
 # Configure default nginx site
 block="server {
@@ -255,20 +255,3 @@ rm /etc/nginx/sites-available/default
 cat > /etc/nginx/sites-enabled/default
 echo "$block" > "/etc/nginx/sites-enabled/default"
 
-# Configure Supervisor
-
-#systemctl enable supervisor.service
-#service supervisor start
-
-# Enable Swap Memory
-
-/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
-/sbin/mkswap /var/swap.1
-/sbin/swapon /var/swap.1
-
-# Minimize The Disk Image
-
-echo "Minimizing disk image..."
-dd if=/dev/zero of=/EMPTY bs=1M
-rm -f /EMPTY
-sync
